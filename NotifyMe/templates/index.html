@@ -6,6 +6,8 @@
 </head>
 <body>
 	<button type="button" onclick="action()">Test</button>
-	<script src="script.js"></script>
+	<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+	<button type="button" onclick="warning()">Test</button>
+	<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
