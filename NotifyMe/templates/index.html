@@ -1,13 +1,124 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Notify Me!</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PTV Manager or bust...</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .search-bar {
+            width: 60%;
+            padding: 8px;
+            border: 1px solid black;
+        }
+        .add-button {
+            width: 40px;
+            height: 40px;
+            font-size: 24px;
+            font-weight: bold;
+            border: 2px solid black;
+            border-radius: 50%;
+            text-align: center;
+            cursor: pointer;
+        }
+        .station-list {
+            margin-top: 20px;
+        }
+        .station-item {
+            margin: 5px 0;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border: 1px solid black;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        }
+        .modal input {
+            width: 80%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+        .modal button {
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .close {
+            float: right;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-	<button type="button" onclick="action()">Test</button>
-	<script src="{{ url_for('static', filename='js/script.js') }}"></script>
-	<button type="button" onclick="warning()">Test</button>
-	<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+<div class="container">
+    <input type="text" class="search-bar" id="searchAdded" placeholder="Search already added station">
+    <div class="add-button" onclick="openModal()">+</div>
+</div>
+
+<div class="station-list" id="stationList">
+    <h3>List of added stations:</h3>
+</div>
+
+<!-- Modal for Adding Stations -->
+<div class="modal" id="stationModal">
+    <span class="close" onclick="closeModal()">X</span>
+    <h3>Add Train Station</h3>
+    <input type="text" id="stationSearch" placeholder="Search PTV station...">
+    <button onclick="addStation()">Add Station</button>
+</div>
+
+<script>
+    let addedStations = [];
+
+    function openModal() {
+        document.getElementById("stationModal").style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById("stationModal").style.display = "none";
+    }
+
+    function addStation() {
+        let stationInput = document.getElementById("stationSearch").value;
+        if (stationInput && !addedStations.includes(stationInput)) {
+            addedStations.push(stationInput);
+            updateStationList();
+            closeModal();
+        }
+    }
+
+    function updateStationList() {
+        let stationListDiv = document.getElementById("stationList");
+        stationListDiv.innerHTML = "<h3>List of added stations:</h3>";
+        addedStations.forEach(station => {
+            let div = document.createElement("div");
+            div.className = "station-item";
+            div.innerText = station;
+            stationListDiv.appendChild(div);
+        });
+    }
+
+    document.getElementById("searchAdded").addEventListener("input", function() {
+        let searchText = this.value.toLowerCase();
+        let items = document.getElementsByClassName("station-item");
+        Array.from(items).forEach(item => {
+            item.style.display = item.innerText.toLowerCase().includes(searchText) ? "" : "none";
+        });
+    });
+</script>
+
 </body>
 </html>
