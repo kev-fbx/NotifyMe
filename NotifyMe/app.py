@@ -18,7 +18,7 @@ def process_data():
         srcCon = connect_to_db(srcDB)
         srcCur = srcCon.cursor()
 
-        srcCur.execute("SELECT * FROM Timetable")
+        srcCur.execute("SELECT * FROM Timetable") # FIXME: Change this to the actual table name
 
         data = srcCur.fetchall()
 
