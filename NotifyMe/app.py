@@ -1,18 +1,42 @@
-from flask import Flask, render_template
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, request, jsonify
+import pyodbc
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-db = SQLAlchemy(app)
 
-class Todo(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.String(25), nullable=False)
-    completed = db.Column(db.Integer, default=0)
-    date_created = db.Column(db.DateTime)
+# Connect to accdb files
+def connect_to_db(path):
+    return pyodbc.connect(
+        r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};'
+        f'DBQ={path}')
 
-    def __repr__(self):
-        return '<Task %r>' % self.id
+@app.route('/process_DB', methods=['POST'])
+def process_data():
+    try:
+        srcDB = 'NotifyMe/db/SAMPLEPTV.accdb'
+        tgtDB = 'NotifyMe/db/SAMPLEProfile.accdb'
+
+        srcCon = connect_to_db(srcDB)
+        srcCur = srcCon.cursor()
+
+        srcCur.execute("SELECT * FROM Timetable") # FIXME: Change this to the actual table name
+
+        data = srcCur.fetchall()
+
+        srcCon.close()
+
+        tgtCon = connect_to_db(tgtDB)
+        tgtCur = tgtCon.cursor()
+
+        for row in data:
+            tgtCur.execute("INSERT INTO Timetable VALUES (?, ?, ?)", row)
+
+        tgtCon.commit()
+        tgtCon.close()
+
+        return jsonify({'status': 'success', 'message': 'Data successfully copied!'}), 200
+
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 @app.route('/')
 def index():
