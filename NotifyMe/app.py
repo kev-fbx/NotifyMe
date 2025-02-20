@@ -18,25 +18,36 @@ def process_data():
         srcCon = connect_to_db(srcDB)
         srcCur = srcCon.cursor()
 
-        srcCur.execute("SELECT * FROM Timetable") # FIXME: Change this to the actual table name
+        srcCur.execute("SELECT * FROM Station")
 
-        data = srcCur.fetchall()
+        stationData = srcCur.fetchall()
 
-        srcCon.close()
+        if stationData:
+            station_ID, stationName = stationData
 
-        tgtCon = connect_to_db(tgtDB)
-        tgtCur = tgtCon.cursor()
+            srcCur.execute("SELECT * FROM DepartureTime WHERE station_ID = ?", station_ID)
+            departureData = srcCur.fetchall()
 
-        for row in data:
-            tgtCur.execute("INSERT INTO Timetable VALUES (?, ?, ?)", row)
+            tgtCon = connect_to_db(tgtDB)
+            tgtCur = tgtCon.cursor()
 
-        tgtCon.commit()
-        tgtCon.close()
+            tgtCur.execute("INSERT INTO Station (station_ID, stationName) VALUES (?, ?)", station_ID, stationName)
+            
+            for departure in departureData:
+                tgtCur.execute("INSERT INTO DepartureTime (departure_ID, station_ID, departureTime, toCity) VALUES (?, ?, ?, ?)", departure)
+
+            tgtCon.commit()
 
         return jsonify({'status': 'success', 'message': 'Data successfully copied!'}), 200
 
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
+    
+    finally:
+        if srcCon:
+            srcCon.close()
+        if tgtCon:
+            tgtCon.close()
 
 @app.route('/')
 def index():
