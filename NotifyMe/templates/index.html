@@ -1,11 +1,12 @@
-{% extends 'base.html' %}
-
-{% block head %}
-    <title>Notify Me</title>
-{% endblock %}
-
-{% block body %}
-    <h1>Home</h1>
-    <button type="button" onclick="processDB()">Click me</button>
-	<script src="{{ url_for('static', filename='js/script.js') }}"></script>
-{% endblock %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Notify Me!</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <h1>Test PTV -> Profile station transfer</h1>
+    <button onclick="transferData()">Test PTV -> Profile station transfer</button>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
