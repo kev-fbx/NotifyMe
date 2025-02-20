@@ -3,3 +3,5 @@
 /html/
 */xml/
 /.venv/
+*.pyc
+__pychache__/
