@@ -17,7 +17,7 @@ def index():
 
 @app.route('/transfer', methods=['POST'])
 def transfer_data():
-    '''Transfer data from the form to the database.'''
+    '''Transfer data from SRC DB to the DST DB.'''
     SRC_Path = os.path.join('NotifyMe', 'db', 'SAMPLEPTV.accdb')
     DST_Path = os.path.join('NotifyMe', 'db', 'SAMPLEProfile.accdb')
 
