@@ -4,4 +4,4 @@
 */xml/
 /.venv/
 *.pyc
-__pychache__/
+/__pychache__/
