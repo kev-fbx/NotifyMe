@@ -1,5 +1,5 @@
 function transferData() {
-  fetch('/transfer', {
+  fetch('/readPTV', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
