@@ -1,12 +1,33 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Notify Me!</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
-</head>
-<body>
-    <h1>Test PTV -> Profile station transfer</h1>
-    <button onclick="transferData()">Test PTV -> Profile station transfer</button>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-</body>
+    <head>
+        <title>Notify Me!</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+        <!-- <script src="{{ url_for('static', filename='js/addStation.js') }}"></script> -->
+    </head>
+    <body>
+        <h1>Notify Me!</h1>
+        <form>
+            <div>
+                <label for="first-name">First name:</label>
+                <input type="text" name="firstName">
+            </div>
+            <div>
+                <label for="last-name">Last name:</label>
+                <input type="text" name="lastName">
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" name="email">
+            </div>
+            <div>
+                <label for="phone">Phone:</label>
+                <input type="phone" name="phone">
+            <div>
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+        <script src="{{ url_for('static', filename='js/signup.js') }}"></script>
+    </body>
 </html>

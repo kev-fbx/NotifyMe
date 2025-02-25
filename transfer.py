@@ -1,4 +1,6 @@
 import os
+
+from flask import request
 from db_utils import connect_to_db
 
 
@@ -62,16 +64,55 @@ def transfer_data():
         # Commit changes
         DST_conn.commit()
 
-        return True, "Data transfer successful."
+        return True, "Data transfer successful.", 200
 
     except Exception as e:
         if SRC_conn:
             SRC_conn.rollback()
 
-        return False, str(e)
+        return False, str(e), 500
     
     finally:
         if SRC_conn:
             SRC_conn.close()
         if DST_conn:
             DST_conn.close()
+
+def submitProfile():
+    
+    path = os.path.join('NotifyMe', 'db', 'SAMPLEProfile.accdb')
+    conn = None
+    
+    try:    
+        dataJSON = request.get_json()
+        
+        conn = connect_to_db(path)
+        cursor = conn.cursor()
+        
+        cursor.execute(
+            "SELECT COUNT(*) FROM User WHERE email = ?",
+            (dataJSON['email'],)
+        )
+        emailMatchCount = cursor.fetchone()[0]
+        
+        if emailMatchCount > 0:
+            return False, "Profile already exists!", 400
+        
+        cursor.execute(
+            "INSERT INTO User (firstName, lastName, email, phone) VALUES (?, ?, ?, ?)",
+            (dataJSON['firstName'], dataJSON['lastName'], dataJSON['email'], dataJSON['phone'])
+        )
+        conn.commit()
+        cursor.close()
+        
+        return True, "Profile submitted successfully!", 200
+    
+    except Exception as e:
+        if conn:
+            conn.rollback()
+            
+        return False, str(e), 500
+    
+    finally:
+        if conn:
+            conn.close()
