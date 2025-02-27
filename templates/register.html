@@ -7,32 +7,18 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body>
-    <h1>Register!</h1>
-    <a href="{{url_for('home')}}">Home</a>
-    <form action="" method="post">
-        <fieldset>
-            <legend>Sign up</legend>
+    <h1>Create an Account</h1>
+    <form action="{{ url_for('register') }}" method="POST">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
 
-            <div class="form-group">
-                <label for="first-name">First name:</label>
-                <input required placeholder="First name" type="text" name="firstName">
-            </div>
-            <div class="form-group">
-                <label for="last-name">Last name:</label>
-                <input required placeholder="Last name" type="text" name="lastName">
-            </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input required placeholder="email@address.com" type="email" name="email">
-            </div>
-            <div class="form-group">
-                <label for="phone">Phone:</label>
-                <input type="phone" name="phone">
-            <div class="form-group">
-                <button type="submit">Submit</button>
-            </div>
-                <script src="{{ url_for('static', filename='js/signup.js') }}"></script>
-        </fieldset>
+        <label for="phone">Phone (Optional):</label>
+        <input type="text" id="phone" name="phone"><br><br>
+
+        <label for="pw_hash">Password:</label>
+        <input type="password" id="pw_hash" name="pw_hash" required><br><br>
+
+        <button type="submit">Register</button>
     </form>
 </body>
 </html>
