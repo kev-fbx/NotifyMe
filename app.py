@@ -1,7 +1,7 @@
 from flask import Flask, redirect, render_template, request, url_for
 from werkzeug.security import generate_password_hash
 
-from models.db_util import insert_user
+from utils.db_util import insert_user
 
 app = Flask(__name__)
 
